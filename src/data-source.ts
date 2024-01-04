@@ -10,7 +10,7 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.TYPEORM_USERNAME,
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
-  entities: ['./src/**/*.entity.ts'],
+  entities: ['./src/**/*.entity{.ts,.js}'],
   migrations: ['./src/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations',
   // logging: true, // Enable if require to see DB queries/logs
