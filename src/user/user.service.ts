@@ -16,6 +16,10 @@ export class UserService {
     });
   }
 
+  async getCurrentUser(user: JwtPayloadDTO) {
+    return this.getUserById(user.Id);
+  }
+
   async getUserById(Id: number) {
     return await this.userRepo.findOne({
       where: { Id },
@@ -41,14 +45,16 @@ export class UserService {
         UserName: true,
         PassWord: true,
         Email: true,
+        Random: true,
       },
     });
     if (
       !(found && found.validatePassword(OldPassWord)) ||
-      NewPassWord != Confirmation
+      NewPassWord != Confirmation ||
+      found.Random
     ) {
       throw new HttpException(
-        'Unable to Authenticate',
+        'Unable to Change Password',
         HttpStatus.UNAUTHORIZED,
       );
     }

@@ -21,6 +21,9 @@ export class User extends BaseModel {
   @Column('varchar', { nullable: true, default: '', length: 100 })
   Email: string;
 
+  @Column({ type: 'boolean', default: false })
+  Random: boolean;
+
   validatePassword(password: string) {
     if (!password || !this.PassWord) return false;
     return bcrypt.compareSync(password, this.PassWord);

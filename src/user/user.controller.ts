@@ -34,6 +34,19 @@ export class UserController {
     return await this.service.getUsers();
   }
 
+  @Get('current')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Get logged in user',
+    type: ResponseUserDTO,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getCurrentUser(@Req() req) {
+    return await this.service.getCurrentUser(req.user);
+  }
+
   @Get(':id')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
