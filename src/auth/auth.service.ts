@@ -41,8 +41,7 @@ export class AuthService {
       );
     }
     const { Id } = found;
-    const IAT = Date.now();
-    const Token = this.jwtService.sign({ Id, IAT, UserName });
+    const Token = this.jwtService.sign({ Id, UserName });
     return { Token, UserName };
   }
 }
