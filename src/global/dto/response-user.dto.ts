@@ -7,4 +7,7 @@ export class ResponseUserDTO extends BaseModelDTO {
 
   @ApiProperty()
   Email: string;
+
+  @ApiProperty()
+  Random: boolean;
 }
