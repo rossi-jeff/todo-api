@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../auth/user.entity';
@@ -8,6 +8,8 @@ import { JwtPayloadDTO } from '../global/dto/jwt-payload.dto';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
   async getUsers() {
@@ -48,18 +50,18 @@ export class UserService {
         Random: true,
       },
     });
-    if (
-      !(found && found.validatePassword(OldPassWord)) ||
-      NewPassWord != Confirmation ||
-      found.Random
-    ) {
+    const valid = found && found.validatePassword(OldPassWord);
+    const match = NewPassWord == Confirmation;
+    const random = found.Random;
+    if (!valid || !match || random) {
       throw new HttpException(
         'Unable to Change Password',
         HttpStatus.UNAUTHORIZED,
       );
     }
     found.setEncryptedPassword(NewPassWord);
-    return await this.userRepo.save(found);
+    await this.userRepo.save(found);
+    return await this.getUserById(found.Id);
   }
 
   async deleteUser(Id: number) {
