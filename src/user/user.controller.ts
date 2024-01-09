@@ -65,6 +65,19 @@ export class UserController {
     return await this.service.getUserById(parseInt(id));
   }
 
+  @Patch('change')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: "Change a user's password",
+    type: ResponseUserDTO,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async changeUserPassword(@Body() dto: ChangePasswordDTO, @Req() req) {
+    return await this.service.changeUserPassword(dto, req.user);
+  }
+
   @Patch(':id')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
@@ -85,19 +98,6 @@ export class UserController {
         HttpStatus.UNAUTHORIZED,
       );
     return await this.service.updateUser(parseInt(id), dto);
-  }
-
-  @Patch('change')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  @ApiResponse({
-    status: 200,
-    description: "Change a user's password",
-    type: ResponseUserDTO,
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async changeUserPassword(@Body() dto: ChangePasswordDTO, @Req() req) {
-    return await this.service.changeUserPassword(dto, req.user);
   }
 
   @Delete(':id')
